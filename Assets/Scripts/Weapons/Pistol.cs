@@ -9,6 +9,28 @@ namespace Weapon {
 
         }
 
+        // TODO: Replace Debug.Drawline with Gizmos
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawLine(transform.position, transform.forward * 2 + transform.position);
+        }
+
+        private void FixedUpdate()
+        {
+            Ray ray = new(transform.position, transform.forward);
+            if (isPressed) {
+                if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
+                    Debug.DrawLine(transform.position, hit.point, Color.red);
+                }
+            }
+            else {
+                if (Physics.Raycast(ray, out RaycastHit hit, 2f)) {
+                    Debug.DrawLine(transform.position, hit.point, Color.green);
+                }
+                Debug.DrawRay(transform.position, transform.forward * 2, Color.green);
+            }
+        }
+
 
 
         public override void OnPress(GameObject gunGameObject)
