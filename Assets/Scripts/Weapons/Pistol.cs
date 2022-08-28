@@ -1,10 +1,22 @@
 namespace Weapon {
     public class Pistol : Gun {
-        Pistol()
+        Pistol() : base("Pistol", 17, 17, 65)
         {
-            gunType = "Pistol";
-            ammoInMag = 17;
-            totalAmmo = 85;
+
+        }
+        public override void OnHold()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnPress()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnTap()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
