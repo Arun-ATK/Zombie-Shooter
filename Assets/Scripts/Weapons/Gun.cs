@@ -1,5 +1,9 @@
+using UnityEngine;
+
+// TODO: Check if it's possible to implement guns without extending MonoBehaviour
+
 namespace Weapon { 
-    public abstract class Gun
+    public abstract class Gun : MonoBehaviour
     {
         protected readonly string gunType;
         protected int ammoInMag;
@@ -14,9 +18,9 @@ namespace Weapon {
             this.totalAmmo = totalAmmo;
         }
 
-        public abstract void OnPress();
-        public abstract void OnHold();
-        public abstract void OnTap();
+        public abstract void OnPress(GameObject gunGameObject);
+        public abstract void OnRelease(GameObject gunGameObject);
+
 
         protected virtual void ConsumeAmmo(int ammoUsed = 1)
         {

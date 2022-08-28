@@ -1,22 +1,36 @@
+using UnityEngine;
+
 namespace Weapon {
     public class Pistol : Gun {
-        Pistol() : base("Pistol", 17, 17, 65)
+        bool isPressed = false;
+
+        public Pistol() : base("Pistol", 17, 17, 65)
         {
 
         }
-        public override void OnHold()
+
+
+
+        public override void OnPress(GameObject gunGameObject)
         {
-            throw new System.NotImplementedException();
+            isPressed = true;
+            Debug.Log("Fire pressed on Pistol");
+            //Ray ray = new(gunGameObject.transform.position, gunGameObject.transform.forward);
+
+            //if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
+            //    Debug.Log(hit.transform.gameObject.name);
+            //    Debug.DrawLine(gunGameObject.transform.position, hit.point, Color.red);
+            //}
+            //else {
+            //    Debug.Log("Should this happen???");
+            //}
+
         }
 
-        public override void OnPress()
+        public override void OnRelease(GameObject gunGameObject)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnTap()
-        {
-            throw new System.NotImplementedException();
+            isPressed = false;
+            Debug.Log("Fire released on Pistol");
         }
     }
 

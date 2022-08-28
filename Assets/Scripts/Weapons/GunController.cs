@@ -1,3 +1,5 @@
+using Weapon;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
@@ -8,6 +10,8 @@ public class GunController : MonoBehaviour
     private PlayerInput playerControls;
     private InputAction fireInputAction;
     private InputAction lookInputAction;
+
+    private Gun gun;
 
     private void OnEnable()
     {
@@ -28,6 +32,7 @@ public class GunController : MonoBehaviour
     private void Awake()
     {
         playerControls = new PlayerInput();
+        gun = gameObject.AddComponent<Pistol>();
     }
 
     // Start is called before the first frame update
@@ -45,15 +50,12 @@ public class GunController : MonoBehaviour
     private void OnFire(InputAction.CallbackContext context)
     {
         if (context.interaction is PressInteraction) {
-            print("Fire pressed");
-        }
-
-        if (context.interaction is HoldInteraction) {
-            print("Fire Held");
-        }
-
-        if (context.interaction is TapInteraction) {
-            print("Fire tapped");
+            if (context.ReadValue<float>() > 0.5) {
+                gun.OnPress(gameObject);
+            }
+            else {
+                gun.OnRelease(gameObject);
+            }
         }
     }
 }
