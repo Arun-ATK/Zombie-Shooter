@@ -2,13 +2,16 @@ using UnityEngine;
 
 // TODO: Check if it's possible to implement guns without extending MonoBehaviour
 
-namespace Weapon { 
+namespace Weapons { 
     public abstract class Gun : MonoBehaviour
     {
         protected readonly string gunType;
-        protected int ammoInMag;
         protected readonly int magSize;
+        protected int ammoInMag;
         protected int totalAmmo;
+
+        protected bool IsPressed { get; set; } = false;
+        protected Vector3 HitLocation { get; set; } = new Vector3();
 
         public Gun(string gunType, int ammoInMag, int magSize, int totalAmmo)
         {
@@ -21,7 +24,17 @@ namespace Weapon {
         public abstract void OnPress(GameObject gunGameObject);
         public abstract void OnRelease(GameObject gunGameObject);
 
-
+        protected virtual void OnDrawGizmos()
+        {
+            if (IsPressed) {
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(transform.position, HitLocation); 
+            }
+            else {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(transform.position, (transform.forward * 2) + transform.position);
+            }
+        }
         protected virtual void ConsumeAmmo(int ammoUsed = 1)
         {
             ammoInMag = (ammoInMag >= ammoUsed) ? ammoInMag - ammoUsed : 0;

@@ -1,4 +1,4 @@
-using Weapon;
+using Weapons;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
