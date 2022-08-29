@@ -16,6 +16,11 @@ namespace Weapons {
                 if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
                     HitLocation = hit.point;
 
+                    // TODO: Handle OnHit logic in a coroutine instead
+                    if (hit.transform.gameObject.CompareTag("Zombie")) {
+                        ZombieController zombie = hit.transform.gameObject.GetComponent<ZombieController>();
+                        zombie.OnHit(10);
+                    }
                     // TODO: Enemy interaction logic
                 }
             }
