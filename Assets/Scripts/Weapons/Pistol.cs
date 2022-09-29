@@ -5,7 +5,7 @@ namespace Weapons {
         
         private bool hasFired = false;
 
-        public Pistol() : base("Pistol", 17, 17, 65, 10)
+        public Pistol() : base(6, 65, 10, 3.0f)
         {
 
         }
@@ -24,30 +24,35 @@ namespace Weapons {
 
         private void FixedUpdate()
         {
+            if (AmmoInMag <= 0) {
+                Reload();
+                
+                return;
+            }
+
             Ray ray = new(transform.position, transform.forward);
             if (FirePressed && !hasFired) {
                 if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
                     if (hit.transform.gameObject.CompareTag("Zombie")) {
                         ZombieController zombie = hit.transform.gameObject.GetComponent<ZombieController>();
-                        zombie.HitByBullet(damagePerBullet);
+                        zombie.HitByBullet(DamagePerBullet);
                     }
                 }
 
                 hasFired = true;
+                ConsumeAmmo();
             }
         }
 
         public override void OnPress()
         {
             FirePressed = true;
-            Debug.Log("Fire pressed on Pistol");
         }
 
         public override void OnRelease()
         {
             FirePressed = false;
             hasFired = false;
-            Debug.Log("Fire released on Pistol");
         }
     }
 }

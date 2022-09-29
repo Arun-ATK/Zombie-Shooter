@@ -1,3 +1,5 @@
+using System.Collections;
+
 using UnityEngine;
 
 // TODO: Check if it's possible to implement guns without extending MonoBehaviour
@@ -8,40 +10,30 @@ namespace Weapons {
         //-------------------------//
         //       ATTRIBUTES        // 
         //-------------------------//
-        protected readonly string gunType;
         protected readonly int magSize;
-        protected int ammoInMag;
-        protected int totalAmmo;
-        protected int damagePerBullet;
+        [SerializeField] protected int totalAmmo;
+        [SerializeField] protected int ammoInMag;
+        protected int DamagePerBullet { get; set; }
         protected bool FirePressed { get; set; } = false;
+        protected float ReloadTimer { get; set; }
+
+        private bool reloading = false;
 
         //--------------------------------------//
         //             CONSTRUCTOR              //
         //--------------------------------------//
-        public Gun(string gunType, int ammoInMag, int magSize, int totalAmmo, int damage)
+        public Gun(int magSize, int totalAmmo, int damage, float reloadTimer)
         {
-            this.gunType = gunType;
-            this.ammoInMag = ammoInMag;
+            this.ammoInMag = magSize;
             this.magSize = magSize;
             this.totalAmmo = totalAmmo;
-            this.damagePerBullet = damage;
+            this.DamagePerBullet = damage;
+            this.ReloadTimer = reloadTimer;
         }
 
         //--------------------------//
         //      VIRTUAL METHODS     //
         //--------------------------//
-        //protected virtual void OnDrawGizmos()
-        //{
-        //    if (IsPressed) {
-        //        Gizmos.color = Color.green;
-        //        Gizmos.DrawLine(transform.position, HitLocation); 
-        //    }
-        //    else {
-        //        Gizmos.color = Color.red;
-        //        Gizmos.DrawLine(transform.position, (transform.forward * 2) + transform.position);
-        //    }
-        //}
-
         protected virtual void ConsumeAmmo(int ammoUsed = 1)
         {
             ammoInMag = (ammoInMag >= ammoUsed) ? ammoInMag - ammoUsed : 0;
@@ -49,6 +41,17 @@ namespace Weapons {
 
         protected virtual void Reload()
         {
+            if (totalAmmo > 0 && !reloading) StartCoroutine(StartReload(ReloadTimer));
+        }
+
+        //------------------//
+        //      METHODS     //
+        //------------------//
+        private IEnumerator StartReload(float timer)
+        {
+            reloading = true;
+            yield return new WaitForSeconds(timer);
+
             if (totalAmmo >= magSize) {
                 ammoInMag = magSize;
                 totalAmmo -= magSize;
@@ -57,6 +60,9 @@ namespace Weapons {
                 ammoInMag = totalAmmo;
                 totalAmmo = 0;
             }
+
+            reloading = false;
+            yield return null;
         }
 
         //---------------------------//
@@ -68,13 +74,6 @@ namespace Weapons {
         //------------------------------//
         //      GETTERS & SETTERS       //
         //------------------------------//
-        public string GunType
-        {
-            get
-            {
-                return GunType;
-            }
-        }
         public int AmmoInMag
         {
             get
