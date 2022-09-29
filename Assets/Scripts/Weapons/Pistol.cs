@@ -30,17 +30,22 @@ namespace Weapons {
                 return;
             }
 
-            Ray ray = new(transform.position, transform.forward);
             if (FirePressed && !hasFired) {
-                if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
-                    if (hit.transform.gameObject.CompareTag("Zombie")) {
-                        ZombieController zombie = hit.transform.gameObject.GetComponent<ZombieController>();
-                        zombie.HitByBullet(DamagePerBullet);
-                    }
-                }
+                ShootGun();
+                ConsumeAmmo();
 
                 hasFired = true;
-                ConsumeAmmo();
+            }
+        }
+
+        private void ShootGun()
+        {
+            Ray ray = new(transform.position, transform.forward);
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
+                if (hit.transform.gameObject.CompareTag("Zombie")) {
+                    ZombieController zombie = hit.transform.gameObject.GetComponent<ZombieController>();
+                    zombie.HitByBullet(DamagePerBullet);
+                }
             }
         }
 
