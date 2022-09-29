@@ -50,12 +50,14 @@ public class GunController : MonoBehaviour
     private void OnFire(InputAction.CallbackContext context)
     {
         if (context.interaction is PressInteraction) {
-            if (context.ReadValue<float>() > 0.5) {
-                gun.OnPress(gameObject);
+            // context.ReadValue returns value greater than 0.5 if button is pressed down
+            if (context.ReadValue<float>() > 0.5f) {
+                gun.OnPress();
             }
             else {
-                gun.OnRelease(gameObject);
+                gun.OnRelease();
             }
+
         }
     }
 }

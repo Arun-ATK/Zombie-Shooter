@@ -20,12 +20,12 @@ public class ZombieController : MonoBehaviour
         
     }
 
-    public void OnHit(float damage)
+    public void HitByBullet(float damage)
     {
         hitPoints -= damage;
         Debug.Log("Zombie current health: " + hitPoints);
 
-        if (hitPoints < 0) OnDeath();
+        if (hitPoints <= 0) OnDeath();
     }
 
     private void OnDeath()

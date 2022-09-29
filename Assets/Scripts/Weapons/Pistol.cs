@@ -2,39 +2,51 @@ using UnityEngine;
 
 namespace Weapons {
     public class Pistol : Gun {
-        //bool isPressed = false;
+        
+        private bool hasFired = false;
 
-        public Pistol() : base("Pistol", 17, 17, 65)
+        public Pistol() : base("Pistol", 17, 17, 65, 10)
         {
 
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (FirePressed) {
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(transform.position, transform.forward * 10 + transform.position);
+            }
+            else {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(transform.position, (transform.forward * 2) + transform.position);
+            }
         }
 
         private void FixedUpdate()
         {
             Ray ray = new(transform.position, transform.forward);
-            if (IsPressed) {
+            if (FirePressed && !hasFired) {
                 if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
-                    HitLocation = hit.point;
-
-                    // TODO: Handle OnHit logic in a coroutine instead
                     if (hit.transform.gameObject.CompareTag("Zombie")) {
                         ZombieController zombie = hit.transform.gameObject.GetComponent<ZombieController>();
-                        zombie.OnHit(10);
+                        zombie.HitByBullet(damagePerBullet);
                     }
-                    // TODO: Enemy interaction logic
                 }
+
+                hasFired = true;
             }
         }
 
-        public override void OnPress(GameObject gunGameObject)
+        public override void OnPress()
         {
-            IsPressed = true;
+            FirePressed = true;
             Debug.Log("Fire pressed on Pistol");
         }
 
-        public override void OnRelease(GameObject gunGameObject)
+        public override void OnRelease()
         {
-            IsPressed = false;
+            FirePressed = false;
+            hasFired = false;
             Debug.Log("Fire released on Pistol");
         }
     }
